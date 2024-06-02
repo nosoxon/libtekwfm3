@@ -1,7 +1,14 @@
-SRCS = wfm.c
+C_OBJS = wfm.o capture.o
 
-all:
-	gcc -shared -fPIC -O3 -s -o libwfm.so $(SRCS)
+CFLAGS = -flto -fPIC -O3
+
+SHARED_OBJ = libtekwfm.so
+
+lib: $(C_OBJS)
+	gcc -shared -s $(CFLAGS) -o $(SHARED_OBJ) $^
+
+$(filter %.o,$(C_OBJS)): %.o: %.c
+	gcc -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm -rf libwfm.so
+	rm -rf $(C_OBJS) $(SHARED_OBJ)

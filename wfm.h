@@ -1,6 +1,9 @@
 #pragma once
 #include <stdint.h>
 
+struct Wfm *map_wfm(char *path);
+int unmap_wfm(struct Wfm *wfm);
+
 enum WfmHdrSetType : uint32_t {
 	/* Single waveform set */
 	WFM_SET_TYPE_SINGLE_WAVEFORM = 0,
@@ -743,15 +746,19 @@ struct WfmFastFrames {
 	 *
 	 * This is for FastFrame waveform sets and defines trigger time
 	 * stamp data. N = number of frames – 1.
+	 *
+	 * len: Static.NFastFrames
 	 */
-	struct WfmUpdateSpec *UpdateSpecs; // parent.StaticFileInfo.NFastFrames
+	struct WfmUpdateSpec *UpdateSpecs;
 	/* N x WfmCurveSpec objects
 	 *
 	 * Variable This is for FastFrame waveform sets, and defines
 	 * curve data offsets for individual frames. N = number of
 	 * frames – 1.
+	 *
+	 * len: Static.NFastFrames
 	 */
-	struct WfmCurveSpec *CurveSpecs; // parent.StaticFileInfo.NFastFrames
+	struct WfmCurveSpec *CurveSpecs;
 };
 
 struct Wfm {
@@ -763,8 +770,10 @@ struct Wfm {
 	 *
 	 * Contains curve data (inclusive of pre/post charge) for all
 	 * waveforms in set in a contiguous block (see notes below).
+	 *
+	 * len: (Static.NFastFrames + 1) * Hdr.CurveSpec.PostchargeStop
 	 */
-	uint8_t *CurveBuffer; // (Static.NFastFrames + 1) * Hdr.CurveSpec.PostchargeStop
+	uint8_t *CurveBuffer;
 	/* Waveform file checksum
 	 *
 	 * Checksum for the waveform file. The checksum is calculated by

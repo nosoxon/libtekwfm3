@@ -34,7 +34,7 @@ def dump_wfm_struct(level: int, s: ctypes.Structure) -> None:
             print(f'{indent * level + attr:40}{val}')
 
 def main(wfm_path: str) -> None:
-    libwfm = ctypes.CDLL('./libwfm.so')
+    libwfm = ctypes.CDLL('./libtekwfm.so')
 
     libwfm.map_wfm.argtypes = (ctypes.c_char_p,)
     libwfm.map_wfm.restype = ctypes.POINTER(Wfm)

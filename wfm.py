@@ -1,11 +1,9 @@
 from ctypes import *
 from enum import IntEnum
 
-
 class WfmHdrSetType(IntEnum):
     SINGLE_WAVEFORM = 0
     FASTFRAME = 1
-
 
 class WfmHdrDataType(IntEnum):
     SCALAR_MEAS = 0
@@ -14,7 +12,6 @@ class WfmHdrDataType(IntEnum):
     INVALID = 4
     WFMDB = 5
     DIGITAL = 6
-
 
 class WfmHdrSummaryFrame(IntEnum):
     OFF = 0

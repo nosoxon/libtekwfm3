@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <err.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -34,9 +33,11 @@ struct Wfm *map_wfm(char *path)
 	close(fd);
 
 	struct Wfm *wfm = calloc(1, sizeof(struct Wfm));
-	assert(wfm);
+	if (!wfm)
+		goto error_free;
 	wfm->FastFrames = calloc(1, sizeof(struct WfmFastFrames));
-	assert(wfm->FastFrames);
+	if (!wfm->FastFrames)
+		goto error_free;
 
 	wfm->Static = (struct WfmStaticFileInfo *) buf;
 	wfm->Hdr = (struct WfmHdr *) (buf
@@ -57,10 +58,21 @@ struct Wfm *map_wfm(char *path)
 	wfm->Size = s.st_size;
 
 	return wfm;
+
+error_free:
+	warn("Unable to map `%s'", path);
+	if (wfm) {
+		free(wfm->FastFrames);
+		free(wfm);
+	}
+
+	return NULL;
 }
 
 int unmap_wfm(struct Wfm *wfm)
 {
-	munmap(wfm, wfm->Size);
+	munmap(wfm->Static, wfm->Size);
+	free(wfm->FastFrames);
+	free(wfm);
 	return 0;
 }
