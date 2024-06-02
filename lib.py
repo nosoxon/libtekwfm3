@@ -9,8 +9,10 @@ class TekWfm:
     lib: Optional[CDLL] = None
 
     @staticmethod
-    def load_library(lib_path: str = './libtekwfm.so'):
-        lib = CDLL(lib_path)
+    def load_library(lib: Optional[CDLL] = None,
+                     lib_path: str = './libtekwfm.so'):
+        if lib is None:
+            lib = CDLL(lib_path)
 
         # wfm.h
         lib.map_wfm.argtypes = (c_char_p,)
