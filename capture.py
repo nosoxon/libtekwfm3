@@ -59,7 +59,7 @@ class Channel(ChildStrucutre):
 
     @property
     def raw_data(self) -> list[int]:
-        return PWrapper(self._raw_data, self._parent.record_len)
+        return PWrapper(self._raw_data, self._parent.data_len)
 
     @property
     def data(self) -> list[float]:
