@@ -88,7 +88,7 @@ class Frame(ChildStrucutre):
 
     @property
     def ch(self) -> list[Channel]:
-        return PWrapper(self.ch, self.parent.nch)
+        return PWrapper(self._ch, self.parent.nch)
 
 class Capture(Structure):
     _fields_ = [
